@@ -1,6 +1,6 @@
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom'
 import { useState, useEffect } from 'react'
-import { supabase } from './lib/storage'
+import { supabase } from './lib/supabase'
 import Dashboard from './pages/Dashboard'
 import Rapporto from './pages/Rapporto'
 import Anteprima from './pages/Anteprima'

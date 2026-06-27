@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react'
 import { useParams, useNavigate } from 'react-router-dom'
-import { getRapporto } from '../lib/storage'
+import { getRapporto } from '../lib/supabase'
 
 const C = { header: '#1E3A5F', accent: '#2563EB', muted: '#64748B', border: '#E2E8F0' }
 

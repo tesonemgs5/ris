@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { signIn } from '../lib/storage'
+import { signIn } from '../lib/supabase'
 
 const C = { bg: '#1E3A5F', accent: '#2563EB', error: '#DC2626' }
 

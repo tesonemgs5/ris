@@ -1,6 +1,6 @@
 import { useState, useEffect, useRef } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { getRapporti, createRapporto, exportBackup, importBackup, deleteRapporto } from '../lib/storage'
+import { getRapporti, createRapporto, exportBackup, importBackup, deleteRapporto } from '../lib/supabase'
 
 const C = { bg: '#F1F5F9', header: '#1E3A5F', accent: '#2563EB', muted: '#64748B', border: '#E2E8F0', success: '#16A34A', danger: '#DC2626' }
 
