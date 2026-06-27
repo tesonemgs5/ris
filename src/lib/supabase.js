@@ -73,3 +73,25 @@ export function subscribeToRapporto(id, callback) {
     }, callback)
     .subscribe()
 }
+
+// ── Backup helpers ────────────────────────────────────────────────────────────
+export function exportBackup() {
+  supabase.from('rapporti').select('*').then(({ data }) => {
+    const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' })
+    const url = URL.createObjectURL(blob)
+    const a = document.createElement('a')
+    a.href = url
+    a.download = `RIS_backup_${new Date().toISOString().slice(0, 10)}.json`
+    a.click()
+    URL.revokeObjectURL(url)
+  })
+}
+
+export async function importBackup(file) {
+  const text = await file.text()
+  const imported = JSON.parse(text)
+  if (!Array.isArray(imported)) throw new Error('File di backup non valido')
+  const { error } = await supabase.from('rapporti').upsert(imported)
+  if (error) throw error
+  return imported.length
+}
