@@ -45,7 +45,6 @@ CREATE TABLE IF NOT EXISTS rapporti (
 
   -- Intervento
   effettuato_in       TEXT,
-  semaforico          TEXT,
   segnalato_da        TEXT,
   ora_segn_hhmm       TEXT,
   data_segn           TEXT,
@@ -54,6 +53,7 @@ CREATE TABLE IF NOT EXISTS rapporti (
   ora_inc_hhmm        TEXT,
   data_inc            TEXT,
   note_intervento     TEXT,
+
   -- Dati intervento pag.2
   p2_data             TEXT,
   p2_giorno           TEXT,
@@ -61,7 +61,7 @@ CREATE TABLE IF NOT EXISTS rapporti (
   p2_festivo          BOOLEAN DEFAULT FALSE,
   p2_agenti_rilevatori TEXT,
 
-  -- Primo intervento (ambulanza, medico legale, polizia, carabinieri...)
+  -- Primo intervento
   pi_ambulanza        BOOLEAN DEFAULT FALSE,
   pi_ambulanza_post   TEXT,
   pi_ambulanza_targa  TEXT,
@@ -95,7 +95,7 @@ CREATE TABLE IF NOT EXISTS rapporti (
   -- Pedoni (array JSON)
   pedoni            JSONB DEFAULT '[]',
 
-  -- Accertamenti psico-fisici (per veicolo A/B/C/D)
+  -- Accertamenti psico-fisici
   psico             JSONB DEFAULT '{}',
 
   -- Decessi
@@ -110,7 +110,7 @@ CREATE TABLE IF NOT EXISTS rapporti (
   cert_decesso_dott TEXT,
   osservazioni      TEXT,
 
-  -- Descrizione strada (pag 9) - colonne dirette
+  -- Descrizione strada
   strada_localiz    TEXT,
   strada_senso      TEXT,
   strada_pav        TEXT,
@@ -144,12 +144,11 @@ CREATE TABLE IF NOT EXISTS rapporti (
   -- Stato rapporto
   stato             TEXT DEFAULT 'bozza' CHECK (stato IN ('bozza', 'completato', 'archiviato')),
 
-  -- Colonna di sicurezza: qualsiasi campo futuro non ancora mappato
-  -- viene comunque salvato qui, così nessun dato si perde mai.
+  -- Campo extra per futuri campi
   extra             JSONB DEFAULT '{}'
 );
 
--- RLS (Row Level Security) - ogni agente vede solo i propri rapporti
+-- RLS
 ALTER TABLE rapporti ENABLE ROW LEVEL SECURITY;
 
 CREATE POLICY "Utenti vedono i propri rapporti"
@@ -188,7 +187,6 @@ CREATE POLICY "Collaboratori accedono ai propri rapporti"
   ON rapporto_collaboratori FOR ALL
   USING (auth.uid() = user_id);
 
--- Policy estesa: i collaboratori vedono anche i rapporti condivisi
 CREATE POLICY "Rapporti condivisi visibili ai collaboratori"
   ON rapporti FOR SELECT
   USING (
