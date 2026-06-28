@@ -51,7 +51,7 @@ export async function updateRapporto(id, data) {
   READONLY_FIELDS.forEach(f => delete clean[f])
   return supabase
     .from('rapporti')
-    .update({ ...clean, updated_at: new Date().toISOString() })
+    .update(clean)
     .eq('id', id)
     .select()
     .single()
