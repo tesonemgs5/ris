@@ -195,13 +195,40 @@ export default function Rapporto(){
   }
 
   function toggleVoice(){
-    if(listening){recognRef.current?.stop();setListening(false);return;}
+    if(listening){
+      recognRef.current?.stop();
+      recognRef.current=null;
+      setListening(false);
+      return;
+    }
     const SR=window.SpeechRecognition||window.webkitSpeechRecognition;
     if(!SR){setAiMsg("⚠️ Microfono non supportato. Usa Chrome.");return;}
-    const r=new SR();r.lang="it-IT";r.continuous=true;r.interimResults=true;
+    const r=new SR();
+    r.lang="it-IT";r.continuous=true;r.interimResults=true;
+    let lastProcessed=0;
     r.onstart=()=>setListening(true);
-    r.onresult=e=>{let fin="";for(let i=e.resultIndex;i<e.results.length;i++)if(e.results[i].isFinal)fin+=e.results[i][0].transcript;if(fin)setAiText(p=>p+" "+fin);};
-    r.onend=()=>setListening(false);r.start();recognRef.current=r;
+    r.onresult=e=>{
+      let fin="";
+      for(let i=lastProcessed;i<e.results.length;i++){
+        if(e.results[i].isFinal){fin+=e.results[i][0].transcript+" ";lastProcessed=i+1;}
+      }
+      if(fin.trim())setAiText(p=>(p+" "+fin.trim()).trim());
+    };
+    r.onend=()=>{
+      if(recognRef.current===r){
+        setListening(false);
+        recognRef.current=null;
+        setAiMsg("⚠️ Registrazione interrotta inaspettatamente. Ripremi il pulsante per continuare.");
+      }
+    };
+    r.onerror=e=>{
+      setListening(false);
+      recognRef.current=null;
+      const msgs={"not-allowed":"⚠️ Microfono non autorizzato. Consenti l'accesso e riprova.","no-speech":"⚠️ Nessun audio rilevato. Ripremi e parla vicino al microfono.","network":"⚠️ Errore di rete durante il riconoscimento vocale."};
+      setAiMsg(msgs[e.error]||`⚠️ Errore microfono: ${e.error}`);
+    };
+    r.start();
+    recognRef.current=r;
   }
 
   async function handleAiFill(){
@@ -683,7 +710,9 @@ JSON:`;
       </div>
 
       {/* ── PULSANTE VOCALE FLOTTANTE ── */}
-      <button onClick={()=>setVPanel(true)} style={{position:"fixed",bottom:24,right:16,width:60,height:60,borderRadius:"50%",background:listening?C.danger:C.accent,color:"#fff",border:"none",fontSize:24,cursor:"pointer",zIndex:200,boxShadow:`0 4px 20px ${listening?"rgba(220,38,38,0.5)":"rgba(37,99,235,0.5)"}`}}>🎙</button>
+      <button onClick={()=>setVPanel(true)} style={{position:"fixed",bottom:24,right:16,width:60,height:60,borderRadius:"50%",background:listening?C.danger:C.accent,color:"#fff",border:"none",fontSize:24,cursor:"pointer",zIndex:200,boxShadow:`0 4px 20px ${listening?"rgba(220,38,38,0.5)":"rgba(37,99,235,0.5)"}`,animation:listening?"pulse 1s ease-in-out infinite":undefined}}>
+  {listening ? <span style={{display:"inline-block",width:18,height:18,borderRadius:"50%",background:"#fff",animation:"pulse 1s ease-in-out infinite"}}/> : "🎙"}
+</button>
 
       {/* ── PANNELLO VOCALE ── */}
       {vPanel&&(
@@ -693,7 +722,7 @@ JSON:`;
             <div style={{fontWeight:800,fontSize:17,color:C.header,marginBottom:4}}>🎙 Compila con voce o testo</div>
             <div style={{fontSize:12,color:C.muted,marginBottom:16}}>Parla o scrivi — l'AI compila tutto il rapporto automaticamente</div>
             <button onClick={toggleVoice} style={{width:"100%",background:listening?"#FEF2F2":C.accentLight,color:listening?C.danger:C.accent,border:`2px solid ${listening?C.danger:C.accent}`,borderRadius:12,padding:13,fontWeight:700,fontSize:14,cursor:"pointer",marginBottom:12}}>
-              {listening?"⏹ Ferma registrazione":"🎙 Parla ora"}
+              {listening ? <><span style={{display:"inline-block",width:10,height:10,borderRadius:"50%",background:C.danger,marginRight:8,animation:"pulse 1s infinite"}}/>In ascolto... parla ora</> : "🎙 Parla ora"}
             </button>
             <textarea value={aiText} onChange={e=>setAiText(e.target.value)}
               placeholder='Es: "Incidente il 17/06/2026 alle 15:30 in Via Toledo 120, tamponamento tra Fiat Punto AB123CD di Rossi Mario e Honda CB500 EF456GH di Esposito Luigi, feriti trasportati al Cardarelli prognosi 30 giorni"'
