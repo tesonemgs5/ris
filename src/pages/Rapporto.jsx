@@ -173,7 +173,14 @@ export default function Rapporto(){
     return () => clearTimeout(saveTimer.current);
   }, [form, id, loading]);
 
-  const set=useCallback((k,v)=>setForm(f=>({...f,[k]:v})),[]);
+  const set=useCallback((k,v)=>setForm(f=>{
+  const n={...f,[k]:v};
+  if(k==="agenti"){
+    const str=v.filter(a=>a.cognome).map(a=>`${a.grado} ${a.cognome} ${a.nome} matr.${a.matricola}`.trim()).join(" - ");
+    n.p2_agenti_rilevatori=str;
+  }
+  return n;
+}),[]);
   const setV=useCallback((vi,k,v)=>setForm(f=>{const a=[...f.veicoli];a[vi]={...a[vi],[k]:v};return{...f,veicoli:a};}),[]);
   const setPsico=useCallback((veic,k,v)=>setForm(f=>({...f,psico:{...f.psico,[veic]:{...f.psico[veic],[k]:v}}})),[]);
 
@@ -187,14 +194,12 @@ export default function Rapporto(){
       const ofmt=hh&&mi?`${hh}:${mi}`:f.p2_ore;
       if(["data_gg","data_mm","data_aa"].includes(key)){n.p2_data=dfmt;n.data_inc=dfmt;n.data_segn=dfmt;n.data_arrivo=dfmt;n.op_fine_gg=key==="data_gg"?val:f.op_fine_gg;n.op_fine_mm=key==="data_mm"?val:f.op_fine_mm;n.op_fine_aa=key==="data_aa"?val:f.op_fine_aa;}
       if(["ora_hh","ora_mm"].includes(key)){n.p2_ore=ofmt;n.ora_inc_hhmm=ofmt;}
-      const set=useCallback((k,v)=>setForm(f=>{
-  const n={...f,[k]:v};
-  if(k==="agenti"){
-    const str=v.filter(a=>a.cognome).map(a=>`${a.grado} ${a.cognome} ${a.nome} matr.${a.matricola}`.trim()).join(" - ");
-    n.p2_agenti_rilevatori=str;
-  }
-  return n;
-}),[]);
+      if(key==="luogo"||key==="civico"||key==="intersezione"){
+        const luogo=key==="luogo"?val:n.luogo;
+        const civico=key==="civico"?val:n.civico;
+        const inter=key==="intersezione"?val:n.intersezione;
+        n.effettuato_in=[luogo,civico,inter].filter(Boolean).join(" - ");
+      }
       return n;
     });
   }
@@ -394,8 +399,8 @@ JSON:`;
           <Card title="📍 Luogo dell'Incidente" icon="">
             <F label="Via / Piazza / Corso" value={form.luogo} onChange={v=>setP("luogo",v)} ph="Via Toledo"/>
             <Row>
-              <Col><F small label="Civico" value={form.civico} onChange={v=>set("civico",v)}/></Col>
-              <Col flex={2}><F small label="Intersezione con" value={form.intersezione} onChange={v=>set("intersezione",v)}/></Col>
+              <Col><F small label="Civico" value={form.civico} onChange={v=>setP("civico",v)}/></Col>
+              <Col flex={2}><F small label="Intersezione con" value={form.intersezione} onChange={v=>setP("intersezione",v)}/></Col>
             </Row>
           </Card>
 
