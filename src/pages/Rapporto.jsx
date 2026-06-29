@@ -187,7 +187,14 @@ export default function Rapporto(){
       const ofmt=hh&&mi?`${hh}:${mi}`:f.p2_ore;
       if(["data_gg","data_mm","data_aa"].includes(key)){n.p2_data=dfmt;n.data_inc=dfmt;n.data_segn=dfmt;n.data_arrivo=dfmt;n.op_fine_gg=key==="data_gg"?val:f.op_fine_gg;n.op_fine_mm=key==="data_mm"?val:f.op_fine_mm;n.op_fine_aa=key==="data_aa"?val:f.op_fine_aa;}
       if(["ora_hh","ora_mm"].includes(key)){n.p2_ore=ofmt;n.ora_inc_hhmm=ofmt;}
-      if(key==="luogo")n.effettuato_in=val;
+      const set=useCallback((k,v)=>setForm(f=>{
+  const n={...f,[k]:v};
+  if(k==="agenti"){
+    const str=v.filter(a=>a.cognome).map(a=>`${a.grado} ${a.cognome} ${a.nome} matr.${a.matricola}`.trim()).join(" - ");
+    n.p2_agenti_rilevatori=str;
+  }
+  return n;
+}),[]);
       return n;
     });
   }
