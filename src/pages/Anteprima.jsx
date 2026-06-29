@@ -66,7 +66,7 @@ export default function Anteprima() {
         <button onClick={() => window.print()} style={{ background: '#16A34A', color: '#fff', border: 'none', borderRadius: 8, padding: '8px 18px', fontWeight: 700, fontSize: 13, cursor: 'pointer' }}>🖨 Stampa</button>
       </div>
 
-      <div style={{ padding: 16 }}>
+      <div id="print-wrap" style={{ padding: 16 }}>
 
         {/* ═══ PAG. 1 ═══ */}
         <div style={S.page}>
@@ -544,7 +544,8 @@ export default function Anteprima() {
         @media print {
           .no-print { display: none !important; }
           body { margin: 0; background: white; }
-          @page { size: A4; margin: 0; }
+          @page { size: A4; margin: 10mm 14mm; }
+          #print-wrap > div { page-break-after: always; break-after: page; }
         }
       `}</style>
     </div>
