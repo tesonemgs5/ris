@@ -101,24 +101,22 @@ const SEZIONI=[
   {id:"chiusura",label:"Chiusura",icon:"✅"},
 ];
 
-const ANTHROPIC_KEY = import.meta.env.VITE_ANTHROPIC_API_KEY;
+const GEMINI_KEY = import.meta.env.VITE_GEMINI_API_KEY;
 
 async function callAI(prompt, imageB64 = null, mediaType = "image/jpeg"){
-  const content = [];
-  if (imageB64) content.push({ type: "image", source: { type: "base64", media_type: mediaType, data: imageB64 } });
-  content.push({ type: "text", text: prompt });
-  const res=await fetch("https://api.anthropic.com/v1/messages",{
-    method:"POST",
-    headers:{
-      "Content-Type":"application/json",
-      "x-api-key": ANTHROPIC_KEY,
-      "anthropic-version": "2023-06-01",
-      "anthropic-dangerous-direct-browser-access": "true"
-    },
-    body:JSON.stringify({model:"claude-sonnet-4-6",max_tokens:1500,messages:[{role:"user",content}]})
-  });
-  const d=await res.json();
-  return d.content?.map(b=>b.text||"").join("")||"{}";
+  const parts = [];
+  if (imageB64) parts.push({ inlineData: { mimeType: mediaType, data: imageB64 } });
+  parts.push({ text: prompt });
+  const res = await fetch(
+    `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${GEMINI_KEY}`,
+    {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ contents: [{ parts }] })
+    }
+  );
+  const d = await res.json();
+  return d.candidates?.[0]?.content?.parts?.[0]?.text || "{}";
 }
 
 function fileToB64(file) {
