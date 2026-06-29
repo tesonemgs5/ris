@@ -509,7 +509,7 @@ JSON:`;
             <F label="Posizione terminale veicoli" value={form.pos_statica_descr} onChange={v=>set("pos_statica_descr",v)} multi/>
           </Card>
           <Card title="Accertamenti Psico-Fisici" icon="🧪" open={false}>
-            {["A","B","C","D"].map(k=>{const p=form.psico[k];return(
+            {["A","B","C","D"].map(k=>{const p=(form.psico||{})[k]||{etil:"",etil_esito:"",narco:"",narco_esito:""};return(
               <div key={k} style={{background:C.sectionBg,borderRadius:8,padding:10,marginBottom:10}}>
                 <div style={{fontWeight:700,fontSize:12,color:C.header,marginBottom:8}}>Veicolo {k}</div>
                 <Row>
