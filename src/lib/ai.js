@@ -1,7 +1,7 @@
 // ── AI Service ────────────────────────────────────────────────────────────────
 // Gestisce: trascrizione voce → compilazione campi + lettura foto documenti
 
-const GEMINI_API = 'https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent'
+const GEMINI_API = 'https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent'
 const GEMINI_KEY = import.meta.env.VITE_GEMINI_API_KEY
 
 // Dizionario dei campi con descrizioni per l'AI
