@@ -494,9 +494,9 @@ JSON:`;
         {sez==="natura"&&<>
           <Card title="Natura dell'Incidente" icon="💥">
             {["Scontro frontale tra veicoli in marcia","Scontro frontale/laterale Dx","Scontro frontale/laterale Sx","Scontro laterale tra veicoli in marcia","Tamponamento multiplo","Investimento di pedone","Scontro con velocipede","Veicolo contro veicolo in arresto","Veicolo contro veicolo fermo","Veicolo contro veicolo in sosta","Veicolo contro ostacolo fisso","Veicolo contro ostacolo accidentale","Fuoriuscita dalla sede stradale","Ribaltamento senza urto","Infortunio per frenata improvvisa","Infortunio per caduta dal veicolo","Veicolo in fuga"].map(opt=>{
-              const checked=form.natura.includes(opt);
+              const checked=(form.natura||[]).includes(opt);
               return <label key={opt} style={{display:"flex",alignItems:"flex-start",gap:10,padding:"9px 0",borderBottom:`1px solid ${C.border}`,cursor:"pointer"}}>
-                <input type="checkbox" checked={checked} onChange={()=>set("natura",checked?form.natura.filter(n=>n!==opt):[...form.natura,opt])} style={{accentColor:C.accent,width:16,height:16,marginTop:2,flexShrink:0}}/>
+                <input type="checkbox" checked={checked} onChange={()=>set("natura",checked?(form.natura||[]).filter(x=>x!==opt):[...(form.natura||[]),opt])} style={{accentColor:C.accent,width:16,height:16,marginTop:2,flexShrink:0}}/>
                 <span style={{fontSize:13,color:"#334155"}}>{opt}</span>
               </label>;
             })}
