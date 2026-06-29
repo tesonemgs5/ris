@@ -1,7 +1,8 @@
 // ── AI Service ────────────────────────────────────────────────────────────────
 // Gestisce: trascrizione voce → compilazione campi + lettura foto documenti
 
-const CLAUDE_API = 'https://api.anthropic.com/v1/messages'
+const GEMINI_API = 'https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent'
+const GEMINI_KEY = import.meta.env.VITE_GEMINI_API_KEY
 
 // Dizionario dei campi con descrizioni per l'AI
 // (subset compatto - l'AI usa le descrizioni per mappare)
@@ -92,18 +93,16 @@ TESTO DA ANALIZZARE:
 
 JSON:`
 
-  const res = await fetch(CLAUDE_API, {
+  const res = await fetch(`${GEMINI_API}?key=${GEMINI_KEY}`, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({
-      model: 'claude-sonnet-4-6',
-      max_tokens: 1500,
-      messages: [{ role: 'user', content: prompt }]
+      contents: [{ parts: [{ text: prompt }] }]
     })
   })
 
   const data = await res.json()
-  const raw = data.content?.map(b => b.text || '').join('') || '{}'
+  const raw = data.candidates?.[0]?.content?.parts?.map(b => b.text || '').join('') || '{}'
   const clean = raw.replace(/```json|```/g, '').trim()
 
   try {
@@ -138,24 +137,21 @@ Non inventare dati.
 
 JSON:`
 
-  const res = await fetch(CLAUDE_API, {
+  const res = await fetch(`${GEMINI_API}?key=${GEMINI_KEY}`, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({
-      model: 'claude-sonnet-4-6',
-      max_tokens: 800,
-      messages: [{
-        role: 'user',
-        content: [
-          { type: 'image', source: { type: 'base64', media_type: mediaType, data: base64Image } },
-          { type: 'text', text: prompt }
+      contents: [{
+        parts: [
+          { inline_data: { mime_type: mediaType, data: base64Image } },
+          { text: prompt }
         ]
       }]
     })
   })
 
   const data = await res.json()
-  const raw = data.content?.map(b => b.text || '').join('') || '{}'
+  const raw = data.candidates?.[0]?.content?.parts?.map(b => b.text || '').join('') || '{}'
   const clean = raw.replace(/```json|```/g, '').trim()
 
   try {
