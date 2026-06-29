@@ -185,7 +185,7 @@ export default function Rapporto(){
       const hh=key==="ora_hh"?val:f.ora_hh, mi=key==="ora_mm"?val:f.ora_mm;
       const dfmt=gg&&mm&&aa?`${gg.padStart(2,"0")}/${mm.padStart(2,"0")}/${aa}`:f.p2_data;
       const ofmt=hh&&mi?`${hh}:${mi}`:f.p2_ore;
-      if(["data_gg","data_mm","data_aa"].includes(key)){n.p2_data=dfmt;n.data_segn=f.data_segn||dfmt;n.data_arrivo=f.data_arrivo||dfmt;n.data_inc=dfmt;n.op_fine_gg=key==="data_gg"?val:f.op_fine_gg;n.op_fine_mm=key==="data_mm"?val:f.op_fine_mm;n.op_fine_aa=key==="data_aa"?val:f.op_fine_aa;}
+      if(["data_gg","data_mm","data_aa"].includes(key)){n.p2_data=dfmt;n.data_inc=dfmt;n.op_fine_gg=key==="data_gg"?val:f.op_fine_gg;n.op_fine_mm=key==="data_mm"?val:f.op_fine_mm;n.op_fine_aa=key==="data_aa"?val:f.op_fine_aa;}
       if(["ora_hh","ora_mm"].includes(key)){n.p2_ore=ofmt;n.ora_inc_hhmm=ofmt;}
       if(key==="luogo")n.effettuato_in=val;
       return n;
