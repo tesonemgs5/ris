@@ -25,8 +25,6 @@ export default defineConfig({
       },
       workbox: {
         globPatterns: ['**/*.{js,css,html,ico,png,svg,pdf,json}']
-        // Nota: quando passerai a Supabase, qui potrai aggiungere runtimeCaching
-        // per le chiamate API verso *.supabase.co
       }
     })
   ]
