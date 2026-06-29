@@ -153,7 +153,7 @@ export default function Rapporto(){
     let active = true;
     getRapporto(id).then(({ data: r, error }) => {
       if (!active) return;
-      if (r) setForm(f => ({ ...f, ...r }));
+      if (r) setForm(f => ({ ...f, ...r, natura: r.natura || [] }));
       setLoading(false);
     });
     return () => { active = false; };
