@@ -3,13 +3,13 @@ import { useParams, useNavigate } from 'react-router-dom'
 import { getRapporto } from '../lib/supabase'
 
 const S = {
-  page: { background: '#fff', width: '210mm', margin: '0 auto', padding: '12mm 14mm', boxSizing: 'border-box', fontFamily: 'Arial, sans-serif', fontSize: 11, color: '#000', pageBreakAfter: 'always' },
+  page: { background: '#fff', width: '210mm', height: '297mm', margin: '0 auto', padding: '12mm 14mm', boxSizing: 'border-box', fontFamily: 'Arial, sans-serif', fontSize: 11, color: '#000', pageBreakAfter: 'always', breakAfter: 'page', overflow: 'hidden', position: 'relative' },
   header: { display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: 8, borderBottom: '2px solid #000', paddingBottom: 6 },
   title: { fontSize: 18, fontWeight: 'bold', textAlign: 'center', border: '2px solid #000', padding: '6px 20px', marginBottom: 10 },
   label: { fontSize: 9, fontWeight: 'bold', textTransform: 'uppercase', color: '#333' },
   line: { borderBottom: '1px solid #000', minHeight: 16, marginBottom: 2, paddingLeft: 2 },
   box: { border: '1px solid #000', padding: '4px 6px', marginBottom: 6 },
-  table: { width: '100%', borderCollapse: 'collapse', marginBottom: 8 },
+  table: { width: '100%', borderCollapse: 'collapse', marginBottom: 8, breakInside: 'avoid' },
   td: { border: '1px solid #000', padding: '3px 5px', fontSize: 10 },
   th: { border: '1px solid #000', padding: '3px 5px', fontSize: 10, fontWeight: 'bold', background: '#f0f0f0', textAlign: 'center' },
   chk: (v) => ({ display: 'inline-block', width: 10, height: 10, border: '1px solid #000', background: v ? '#000' : '#fff', marginRight: 3, verticalAlign: 'middle', flexShrink: 0 }),
@@ -66,7 +66,7 @@ export default function Anteprima() {
         <button onClick={() => window.print()} style={{ background: '#16A34A', color: '#fff', border: 'none', borderRadius: 8, padding: '8px 18px', fontWeight: 700, fontSize: 13, cursor: 'pointer' }}>🖨 Stampa</button>
       </div>
 
-      <div id="print-wrap" style={{ padding: 16 }}>
+      <div id="print-wrap" className="print-wrap-outer" style={{ padding: 16 }}>
 
         {/* ═══ PAG. 1 ═══ */}
         <div style={S.page}>
@@ -544,7 +544,8 @@ export default function Anteprima() {
         @media print {
           .no-print { display: none !important; }
           body { margin: 0; background: white; }
-          @page { size: A4; margin: 10mm 14mm; }
+          @page { size: A4; margin: 0; }
+          .print-wrap-outer { padding: 0 !important; }
           #print-wrap > div { page-break-after: always; break-after: page; }
         }
       `}</style>
