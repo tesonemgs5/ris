@@ -3,7 +3,7 @@ import { useParams, useNavigate } from 'react-router-dom'
 import { getRapporto } from '../lib/supabase'
 
 const S = {
-  page: { background: '#fff', width: '210mm', minHeight: '297mm', margin: '0 auto', padding: '12mm 14mm', boxSizing: 'border-box', fontFamily: 'Arial, sans-serif', fontSize: 11, color: '#000', pageBreakAfter: 'always', breakAfter: 'page', position: 'relative' },
+  page: { background: '#fff', width: '210mm', margin: '0 auto', padding: '12mm 14mm', boxSizing: 'border-box', fontFamily: 'Arial, sans-serif', fontSize: 11, color: '#000', pageBreakAfter: 'always', breakAfter: 'page', position: 'relative' },
   header: { display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: 8, borderBottom: '2px solid #000', paddingBottom: 6 },
   title: { fontSize: 18, fontWeight: 'bold', textAlign: 'center', border: '2px solid #000', padding: '6px 20px', marginBottom: 10 },
   label: { fontSize: 9, fontWeight: 'bold', textTransform: 'uppercase', color: '#333' },
