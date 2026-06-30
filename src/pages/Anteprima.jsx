@@ -542,11 +542,11 @@ export default function Anteprima() {
 
       <style>{`
         @media print {
+          html, body { margin: 0; padding: 0; background: white; height: auto; }
           .no-print { display: none !important; }
-          body { margin: 0; background: white; }
-          @page { size: A4; margin: 0; }
+          @page { size: A4 portrait; margin: 0; }
           .print-wrap-outer { padding: 0 !important; }
-          #print-wrap > div { page-break-after: always; break-after: page; }
+          #print-wrap > div { page-break-after: always; break-after: page; page-break-inside: avoid; }
         }
       `}</style>
     </div>
