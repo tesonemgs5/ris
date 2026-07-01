@@ -1,6 +1,6 @@
 import os
 
-BASE = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+BASE = os.path.dirname(os.path.abspath(__file__))
 gitignore_path = os.path.join(BASE, ".gitignore")
 
 righe_necessarie = [".env", ".env.local", ".env.*.local", "node_modules/"]

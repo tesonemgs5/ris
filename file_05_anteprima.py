@@ -388,7 +388,7 @@ export default function Anteprima() {
 """
 
 import os
-BASE = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+BASE = os.path.dirname(os.path.abspath(__file__))
 dest = os.path.join(BASE, "src/pages/Anteprima.jsx")
 os.makedirs(os.path.dirname(dest), exist_ok=True)
 with open(dest, "w", encoding="utf-8") as f:

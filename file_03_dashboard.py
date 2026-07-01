@@ -1,6 +1,6 @@
 import os
 
-BASE = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+BASE = os.path.dirname(os.path.abspath(__file__))
 dest = os.path.join(BASE, "src", "pages", "Dashboard.jsx")
 os.makedirs(os.path.dirname(dest), exist_ok=True)
 

@@ -2,7 +2,7 @@ import os
 import shutil
 
 # ── Radice del progetto (due livelli su rispetto a questa cartella)
-BASE = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+BASE = os.path.dirname(os.path.abspath(__file__))
 SRC  = os.path.join(BASE, "src")
 LIB  = os.path.join(SRC, "lib")
 PAG  = os.path.join(SRC, "pages")
